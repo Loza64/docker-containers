@@ -1,0 +1,43 @@
+services:
+  mongo:
+    image: mongo:latest
+    container_name: some-mongo
+
+    ports:
+      - "27017:27017"
+
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: ${MONGO_INITDB_ROOT_USERNAME:-mongo}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_INITDB_ROOT_PASSWORD:-change_me}
+
+    volumes:
+      - db:/data/db
+      - config:/data/configdb
+
+    restart: unless-stopped
+
+    networks:
+      - mongo-network
+
+    healthcheck:
+      test: ["CMD", "mongosh", "--eval", "db.adminCommand('ping')"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+    # ports:
+    #   - "127.0.0.1:27017:27017"
+
+networks:
+  mongo-network:
+    driver: bridge
+
+volumes:
+  db:
+  config:

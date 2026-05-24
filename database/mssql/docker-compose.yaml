@@ -1,0 +1,45 @@
+services:
+  mssql:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    container_name: some-mssql
+
+    ports:
+      - "1433:1433"
+
+    environment:
+      ACCEPT_EULA: "Y"
+      SA_PASSWORD: ${SA_PASSWORD:-ChangeMe123*}
+
+    volumes:
+      - data:/var/opt/mssql
+
+    networks:
+      - mssql-network
+
+    restart: unless-stopped
+
+    healthcheck:
+      test:
+        [
+          "CMD-SHELL",
+          "/opt/mssql-tools/bin/sqlcmd -S localhost -U sa -P $$SA_PASSWORD -Q 'SELECT 1' || exit 1",
+        ]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+    # ports:
+    #   - "127.0.0.1:1433:1433"
+
+networks:
+  mssql-network:
+    driver: bridge
+
+volumes:
+  data:
