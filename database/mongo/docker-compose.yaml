@@ -17,7 +17,7 @@ services:
     restart: unless-stopped
 
     networks:
-      - mongo-network
+      - network
 
     healthcheck:
       test: ["CMD", "mongosh", "--eval", "db.adminCommand('ping')"]
@@ -35,7 +35,7 @@ services:
     #   - "127.0.0.1:27017:27017"
 
 networks:
-  mongo-network:
+  network:
     driver: bridge
 
 volumes:

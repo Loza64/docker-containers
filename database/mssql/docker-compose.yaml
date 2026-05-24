@@ -14,7 +14,7 @@ services:
       - data:/var/opt/mssql
 
     networks:
-      - mssql-network
+      - network
 
     restart: unless-stopped
 
@@ -38,7 +38,7 @@ services:
     #   - "127.0.0.1:1433:1433"
 
 networks:
-  mssql-network:
+  network:
     driver: bridge
 
 volumes:

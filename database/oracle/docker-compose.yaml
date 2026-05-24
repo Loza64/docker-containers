@@ -13,7 +13,7 @@ services:
       - data:/opt/oracle/oradata
 
     networks:
-      - oracle-network
+      - network
 
     restart: unless-stopped
 
@@ -37,7 +37,7 @@ services:
     #   - "127.0.0.1:1433:1433"
 
 networks:
-  oracle-network:
+  network:
     driver: bridge
 
 volumes:
