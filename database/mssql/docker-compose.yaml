@@ -12,6 +12,7 @@ services:
 
     volumes:
       - data:/var/opt/mssql
+      - ./backups:/var/opt/mssql/backup
 
     networks:
       - network
