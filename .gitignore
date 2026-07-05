@@ -1,1 +1,2 @@
 **/.env
+/database/mssql/backups/**.bak
