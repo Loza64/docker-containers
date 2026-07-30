@@ -1,0 +1,13 @@
+services:
+  rabbitmq:
+    image: rabbitmq:3-management
+    ports:
+      - "5672:5672"
+      - "61613:61613"
+      - "15672:15672"
+    environment:
+      RABBITMQ_DEFAULT_USER: ${RABBITMQ_USER}
+      RABBITMQ_DEFAULT_PASS: ${RABBITMQ_PASS}
+    command: >
+      sh -c "rabbitmq-plugins enable rabbitmq_stomp rabbitmq_management &&
+             rabbitmq-server"
