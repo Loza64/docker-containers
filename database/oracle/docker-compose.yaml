@@ -1,6 +1,6 @@
 services:
   oracle:
-    image: oracle/database:19.3.0-ee
+    image: doctorkirk/oracle-19c:latest
     container_name: some-oracle
     ports:
       - "1521:1521"
@@ -14,14 +14,8 @@ services:
       - oracle-data:/opt/oracle/oradata
     networks:
       - network
-    restart: unless-stopped
+    restart: "no"
     shm_size: 1g
-    healthcheck:
-      test: ["CMD", "/opt/oracle/checkDBStatus.sh"]
-      interval: 30s
-      timeout: 10s
-      retries: 20
-      start_period: 300s
     logging:
       driver: "json-file"
       options:
