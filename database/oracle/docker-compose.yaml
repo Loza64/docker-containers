@@ -1,44 +1,37 @@
 services:
   oracle:
-    image: gvenzl/oracle-free:23-slim
+    image: oracle/database:19.3.0-ee
     container_name: some-oracle
-
     ports:
       - "1521:1521"
-
+      - "5500:5500"
     environment:
-      ORACLE_PASSWORD: ${ORACLE_PASSWORD:-change_me}
-
+      ORACLE_SID: ORCLCDB
+      ORACLE_PDB: ORCLPDB1
+      ORACLE_PWD: ${ORACLE_PASSWORD:-change_me}
+      ORACLE_CHARACTERSET: AL32UTF8
     volumes:
-      - data:/opt/oracle/oradata
-
+      - oracle-data:/opt/oracle/oradata
     networks:
       - network
-
     restart: unless-stopped
-
+    shm_size: 1g
     healthcheck:
-      test:
-        [
-          "CMD-SHELL",
-          "echo 'select 1 from dual;' | sqlplus -s system/$${ORACLE_PASSWORD}@localhost:1521/FREEPDB1 || exit 1",
-        ]
-      interval: 20s
+      test: ["CMD", "/opt/oracle/checkDBStatus.sh"]
+      interval: 30s
       timeout: 10s
-      retries: 10
-
+      retries: 20
+      start_period: 300s
     logging:
       driver: "json-file"
       options:
         max-size: "10m"
         max-file: "3"
 
-    # ports:
-    #   - "127.0.0.1:1433:1433"
-
 networks:
   network:
     driver: bridge
 
 volumes:
-  data:
+  oracle-data:
+    name: oracle-data
