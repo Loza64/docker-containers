@@ -14,7 +14,7 @@ services:
       - oracle-data:/opt/oracle/oradata
     networks:
       - network
-    restart: "no"
+    restart: unless-stopped
     shm_size: 1g
     logging:
       driver: "json-file"
